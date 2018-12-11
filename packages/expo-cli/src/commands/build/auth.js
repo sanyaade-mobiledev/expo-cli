@@ -54,15 +54,6 @@ export const doesFileProvidedExist = async (printOut, p12Path) => {
   }
 };
 
-export const doFastlaneActionsExist = async () => {
-  return Promise.all(
-    Object.keys(FASTLANE).map(async action => {
-      let path = FASTLANE[action];
-      return { action, path, doesExist: await doesFileProvidedExist(false, path) };
-    })
-  );
-};
-
 function appStoreAction(creds, metadata, teamId, action) {
   const args = [
     action,
@@ -101,13 +92,13 @@ export function produceProvisionProfile(
   ]);
 }
 
-export function producePushCerts(credentials, { bundleIdentifier }, teamId, isEnterprise) {
+export function producePushKey(credentials, teamId, name = 'Expo Push Notifications Key') {
+  // TODO: zmien to bo to w sumie nie dziala
   return spawnAndCollectJSONOutputAsync(FASTLANE.fetch_push_cert, [
     credentials.appleId,
     credentials.password,
-    bundleIdentifier,
     teamId,
-    isEnterprise,
+    name,
   ]);
 }
 
