@@ -5,7 +5,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import untildify from 'untildify';
-import { Exp, Credentials } from 'xdl';
+import { Exp, Credentials, Android } from 'xdl';
 import chalk from 'chalk';
 import log from '../../log';
 
@@ -17,6 +17,9 @@ export default class AndroidBuilder extends BaseBuilder {
     const buildOptions = options.publicUrl ? { publicUrl: options.publicUrl } : {};
     // Validate project
     const sdkVersion = await this.validateProject(buildOptions);
+    // Check SplashScreen images sizes
+    await Android.checkSplashScreenImages(this.projectDir);
+
     const { releaseChannel } = options;
     // Check the status of any current builds
     await this.checkStatus({ platform: 'android', sdkVersion, releaseChannel, ...buildOptions });
